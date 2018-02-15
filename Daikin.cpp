@@ -42,7 +42,6 @@ bool decodeDaikin(byte *bytes, int byteCount)
     // Fan speed
     switch (bytes[24] & 0xF0) {
       case 0xB0:
-        // Outdoor unit quiet
         Serial.println(F("FAN: QUIET"));
         break;
       case 0xA0:
@@ -69,8 +68,11 @@ bool decodeDaikin(byte *bytes, int byteCount)
     Serial.print(F("FLAGS: "));
     if (bytes[29] & 0x01) Serial.print(F("POWERFUL "));
     if (bytes[32] & 0x04) Serial.print(F("ECONO "));
-    if (bytes[24] & 0x0F) Serial.print(F("SWING "));
-    if (bytes[29] & 0x20) Serial.print(F("QUIET"));
+    if (bytes[24] & 0x0F) Serial.print(F("VSWING "));
+    if (bytes[25] & 0x0F) Serial.print(F("HSWING "));
+    if (bytes[29] & 0x20) Serial.print(F("QUIET ")); // Outdoor unit quiet
+    if (bytes[6] & 0x10) Serial.print(F("COMFORT "));
+    if (bytes[32] & 0x02) Serial.print(F("INTELLIGENT EYE"));
     Serial.println();
 
     // Check if the checksum matches
